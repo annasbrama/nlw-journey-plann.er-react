@@ -1,10 +1,13 @@
-import { MapPin, Calendar, ArrowRight, UserRoundPlus, Settings2, X, AtSign, Plus } from 'lucide-react'
+import { MapPin, Calendar, ArrowRight, UserRoundPlus, Settings2, X, AtSign, Plus, User, Mail } from 'lucide-react'
 import { FormEvent, useState } from 'react'
 
 export function App() {
 
   const [isGuestsInputOpen, setIsGuestInputOpen] = useState(false)
   const [isGuestsModalOpen, setIsGuestModalOpen] = useState(false)
+  const [isConfirmTripModalOpen, setIsConfirmTripModalOpen] = useState(false)
+
+
   const [emailsToInvite, setEmailsToInvite] = useState([
     'anna@gmail.com'
   ])
@@ -25,29 +28,37 @@ export function App() {
     setIsGuestModalOpen(false)
   }
 
-  function addNewEmailToInvite(event: FormEvent<HTMLFormElement>){
+  function openConfirmTripModal() {
+    setIsConfirmTripModalOpen(true)
+  }
+
+  function closeConfirmTripModal() {
+    setIsConfirmTripModalOpen(false)
+  }
+
+  function addNewEmailToInvite(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     // setEmailsToInvite(true)
     const data = new FormData(event.currentTarget)
     const email = data.get('email')?.toString()
 
-    if(!email) {
+    if (!email) {
       return
     }
 
-    if(emailsToInvite.includes(email)){
+    if (emailsToInvite.includes(email)) {
       return
     }
-    
+
     setEmailsToInvite([
-      ...emailsToInvite, 
+      ...emailsToInvite,
       email
     ])
 
     event.currentTarget.reset()
   }
 
-  function removeEmailfromInvites(emailToRemove: string){
+  function removeEmailfromInvites(emailToRemove: string) {
     const newEmailList = emailsToInvite.filter(email => email !== emailToRemove)
 
     setEmailsToInvite(newEmailList)
@@ -99,7 +110,7 @@ export function App() {
               <div className="w-px h-6 bg-zinc-800">
               </div>
 
-              <button className="bg-lime-300 text-lime-950 rounded-lg px-5 py-2 font-medium flex items-center gap-2 hover:bg-lime-400">
+              <button onClick={openConfirmTripModal} className="bg-lime-300 text-lime-950 rounded-lg px-5 py-2 font-medium flex items-center gap-2 hover:bg-lime-400">
                 Confirmar Viagem
                 <ArrowRight className="size-5" /></button>
             </div>
@@ -156,6 +167,44 @@ export function App() {
 
           </div>
         </div>
+      )}
+
+      {isConfirmTripModalOpen && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center">
+        <div className="w-[640px] rounded-xl py-5 px-6 shadow-shape bg-zinc-900 space-y-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">
+                Confirmar criação da viagem              </h2>
+              <button type="button" onClick={closeConfirmTripModal}>
+                <X className="size-5 text-zinc-400" />
+              </button>
+            </div>
+            <p className="text-sm text-zinc-400">
+              Para concluir a criação da viagem para <span className="font-semibold text-zinc-100">Florianópolis, Brasil</span> nas datas de <span className="font-semibold text-zinc-100">16 a 27 de Agosto de 2024</span> preencha seus dados abaixo:</p>
+          </div>
+
+          <form onSubmit={addNewEmailToInvite} >
+            <div className="px-2.5 py-3 bg-zinc-950 border border-zinc-800 rounded-lg flex items-center gap-2">
+              <User className="text-zinc-400 " />
+              <input name="name" placeholder="Seu nome completo" className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1" />
+            </div>
+          </form>
+
+          <form onSubmit={addNewEmailToInvite} >
+            <div className="px-2.5 py-3 bg-zinc-950 border border-zinc-800 rounded-lg flex items-center gap-2">
+              <Mail className="text-zinc-400 " />
+              <input type="email" name="email" placeholder="Seu e-mail pessoal" className="bg-transparent text-lg placeholder-zinc-400 outline-none flex-1" />
+            </div>
+            <div className="px-2.5x py-3 rounded-lg flex items-center gap-2">
+              <button type="submit" className="bg-lime-300 text-lime-950 rounded-lg px-5 py-3 font-medium flex flex-1 justify-center gap-2 hover:bg-lime-400">
+                Confirmar criação da viagem
+              </button>
+            </div>
+          </form>
+
+        </div>
+      </div>
       )}
 
     </div>
