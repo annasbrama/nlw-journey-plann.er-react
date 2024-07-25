@@ -34,7 +34,6 @@ export function InviteGuestsModal({ emailsToInvite, addNewEmailToInvite, closeGu
                                 <button type="button" onClick={() => removeEmailFromInvites(email)}>
                                     <X className="size-4 text-zinc-400" />
                                 </button>
-
                             </div>
                         )
                     })}
